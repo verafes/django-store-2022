@@ -1,0 +1,10 @@
+### Django online store project###
+db.sqlite3
+.idea/
+*.pyc
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
+.DS_Store
+media
+static
