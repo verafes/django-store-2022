@@ -23,7 +23,6 @@ class Product(models.Model):
         verbose_name = "Product"
         verbose_name_plural = "Products"
 
-    user = models.ForeignKey(User, verbose_name="Owner", on_delete=models.CASCADE)
     title = models.CharField(verbose_name="Title", max_length=200, blank=False, null=False)
     price = models.DecimalField(verbose_name="Price", default=0, decimal_places=2, max_digits=10)
     old_price = models.DecimalField(verbose_name="Old Price", default=0, decimal_places=2, max_digits=10, null=False)
@@ -59,7 +58,7 @@ class ProductCategory(models.Model):
     category = models.ForeignKey(Category, verbose_name="Category", on_delete=models.CASCADE, blank=False, null=False)
 
     def __str__(self):
-        return f"for '{self.product}' product"
+        return self.product.title
 
 
 class ProductReview(models.Model):

@@ -13,7 +13,7 @@ class Customer(models.Model):
     phone = models.BigIntegerField(verbose_name="Phone number")
     email = models.CharField(verbose_name="Email", max_length=200, blank=False, null=False)
     time_created = models.DateTimeField(verbose_name="Date", auto_now_add=True)
-    user = models.ForeignKey(User, verbose_name="Owner", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, verbose_name="Customer", on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.first_name, self.last_name
@@ -29,5 +29,6 @@ class CustomerAddress(models.Model):
     city = models.CharField(verbose_name="City", max_length=30, blank=False, null=False)
     address = models.CharField(verbose_name="Address", max_length=200, blank=False, null=False)
     post_code = models.CharField(verbose_name="Post code", max_length=10, blank=False, null=False)
-    customer = models.ForeignKey(Customer, verbose_name="Customer Address", on_delete=models.CASCADE, blank=False, null=False)
+    customer = models.ForeignKey(Customer, verbose_name="Customer Address", on_delete=models.CASCADE,
+                                 blank=False, null=False)
 
