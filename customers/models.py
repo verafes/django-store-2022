@@ -1,5 +1,7 @@
 from django.db import models
-from products.models import User
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Customer(models.Model):
@@ -27,7 +29,7 @@ class CustomerAddress(models.Model):
 
     country = models.CharField(verbose_name="Country", max_length=60, blank=False, null=False)
     city = models.CharField(verbose_name="City", max_length=30, blank=False, null=False)
-    address = models.CharField(verbose_name="Address", max_length=200, blank=False, null=False)
+    address = models.CharField(verbose_name="Street Address", max_length=200, blank=False, null=False)
     post_code = models.CharField(verbose_name="Post code", max_length=10, blank=False, null=False)
     customer = models.ForeignKey(Customer, verbose_name="Customer Address", on_delete=models.CASCADE,
                                  blank=False, null=False)

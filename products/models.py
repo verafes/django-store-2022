@@ -1,8 +1,4 @@
 from django.db import models
-from django.contrib.auth import get_user_model
-
-# Create your models here.
-User = get_user_model()
 
 
 class Brand(models.Model):
@@ -28,7 +24,7 @@ class Product(models.Model):
     old_price = models.DecimalField(verbose_name="Old Price", default=0, decimal_places=2, max_digits=10, null=False)
     description = models.CharField(verbose_name="Description", max_length=100000, blank=False, null=False)
     quantity = models.DecimalField(verbose_name="Quantity", default=0, decimal_places=2, max_digits=4, null=False)
-    image = models.ImageField(verbose_name="Image", upload_to='images/', null=True, blank=True)
+    photo = models.ImageField(verbose_name="Photo", upload_to='images/', null=True, blank=True)
     brand = models.ForeignKey(Brand, verbose_name="Brand", on_delete=models.CASCADE, blank=False, null=False)
 
     def __str__(self):
