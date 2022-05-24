@@ -15,11 +15,6 @@ class CategoryList(generics.ListAPIView):
 
 
 class ProductList(generics.ListAPIView):
-    # queryset = Category.objects.all()
-
+    queryset = Category.objects.all()
     serializer_class = ProductSerializer
-
-    def get_queryset(self):
-        return Product.objects.filter(category=True)
-
-    
+   

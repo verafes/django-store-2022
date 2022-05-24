@@ -15,7 +15,7 @@ class Order(models.Model):
     time_created = models.DateTimeField(verbose_name="Created Date", auto_now_add=True)
     time_checkout = models.DateTimeField(verbose_name="Checkout Date", auto_now_add=True)
     time_delivery = models.DateTimeField(verbose_name="Delivery Date", auto_now_add=True)
-    is_ordered = models.BooleanField(verbose_name="Title", default=False, blank=False, null=False)
+    is_ordered = models.BooleanField(verbose_name="Is Ordered", default=False, blank=False, null=False)
 
 
 class OrderProduct(models.Model):

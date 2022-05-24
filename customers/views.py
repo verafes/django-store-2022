@@ -7,7 +7,6 @@ from .serializers import CustomerSerializer
 # Create your views here.
 class CustomerList(generics.ListAPIView):
     queryset = Customer.objects.all()
-
     serializer_class = CustomerSerializer
 
  #   def get_queryset(self):
@@ -16,6 +15,5 @@ class CustomerList(generics.ListAPIView):
 
 class CustomerAddressList(generics.ListAPIView):
     queryset = CustomerAddress.objects.all()
-
     serializer_class = CustomerSerializer
 
