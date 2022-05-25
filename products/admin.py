@@ -15,7 +15,7 @@ class BrandAdmin(admin.ModelAdmin):
 
 
 class ProductCategoryAdmin(admin.ModelAdmin):
-    list_display = ['id', 'product_id', 'category_id']
+    list_display = ['id', 'product', 'category']
 
 
 class ProductReviewAdmin(admin.ModelAdmin):
