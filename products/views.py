@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from rest_framework import generics, filters
+from rest_framework.permissions import IsAdminUser
 
 from .filters import ProductFilter
 from .models import Category, Product, Brand
-from .serializers import CategorySerializer, ProductSerializer, BrandSerializer
+from .serializers import CategorySerializer, ProductSerializer, BrandSerializer, ProductPreviewSerialazer, \
+    ProductRetrieveSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
 
@@ -19,7 +21,7 @@ class CategoryList(generics.ListAPIView):
 
 class ProductList(generics.ListAPIView):
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+    serializer_class = ProductPreviewSerialazer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_class = ProductFilter
 #    filterset_fields = ["title"]
@@ -30,8 +32,30 @@ class ProductList(generics.ListAPIView):
     #     return Product.objects.filter(price__gte=900, price__lte=1400)
 
 
+class ProductCreate(generics.CreateAPIView):
+    serializer_class = ProductSerializer
+    permission_classes = [IsAdminUser]
+
+
+class ProductRUD(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
+    permission_classes = [IsAdminUser]
+
+
+class ProductRetrieve(generics.RetrieveAPIView):
+    serializer_class = ProductRetrieveSerializer
+    queryset = Product.objects.all()
+
+
 class BrandList(generics.ListAPIView):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
+
+
+# получить товары по категориям - категория/id/product > все товары данной категории
+# по аналогии с отзывами  > метод > список товаров в конкретном бренде
+# список брендов
+
 
 
