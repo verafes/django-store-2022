@@ -9,6 +9,7 @@ class CustomerList(generics.ListAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
 
+
  #   def get_queryset(self):
  #       return Customer.objects.filter(is_ordered=True)
 

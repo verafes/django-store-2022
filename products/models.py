@@ -23,9 +23,9 @@ class Product(models.Model):
     price = models.DecimalField(verbose_name="Price", default=0, decimal_places=2, max_digits=10)
     old_price = models.DecimalField(verbose_name="Old Price", default=0, decimal_places=2, max_digits=10, null=False)
     description = models.CharField(verbose_name="Description", max_length=100000, blank=False, null=False)
-    quantity = models.DecimalField(verbose_name="Quantity", default=0, decimal_places=2, max_digits=4, null=False)
+    quantity = models.IntegerField(verbose_name="Quantity", default=0, null=False)
     photo = models.ImageField(verbose_name="Photo", upload_to='images/', null=True, blank=True)
-    brand = models.ForeignKey(Brand, verbose_name="Brand", on_delete=models.CASCADE, blank=False, null=True)
+    brand = models.ForeignKey(Brand, related_name="brand_products", verbose_name="Brand", on_delete=models.CASCADE, blank=False, null=True)
 
     def __str__(self):
         return self.title
@@ -50,8 +50,8 @@ class ProductCategory(models.Model):
         verbose_name = "Product Category"
         verbose_name_plural = "Products Categories"
 
-    product = models.ForeignKey(Product, verbose_name="Product", on_delete=models.CASCADE, blank=False, null=False)
-    category = models.ForeignKey(Category, verbose_name="Category", on_delete=models.CASCADE, blank=False, null=False)
+    product = models.ForeignKey(Product,  verbose_name="Product", on_delete=models.CASCADE, blank=False, null=False)
+    category = models.ForeignKey(Category, related_name="category_products", verbose_name="Category", on_delete=models.CASCADE, blank=False, null=False)
 
     def __str__(self):
         return self.product.title
