@@ -5,11 +5,11 @@ from .views import CategoryList, ProductList, BrandList, ProductCreate, ProductR
 urlpatterns = [
     path("category/list/", CategoryList.as_view()),
     path("all/", ProductList.as_view()),
-    path("brand/all/", BrandList.as_view()),
+    path("brands/all/", BrandList.as_view()),
     path("add/", ProductCreate.as_view()),
     path("rud/<int:pk>/", ProductRUD.as_view()),
     path("get/<int:pk>/", ProductRetrieve.as_view()),
-    path("brand/get/<int:pk>/", ProductBrandRetrieve.as_view()),
+    path("brands/get/<int:pk>/", ProductBrandRetrieve.as_view()),
     path("category/get/<int:pk>/", CategoryProductRetrieve.as_view())
 ]
 

@@ -12,9 +12,12 @@ class CategorySerializer(serializers.ModelSerializer):
 
 # product-category
 class CategoryProductSerializer(serializers.ModelSerializer):
+    product_title = serializers.CharField(source="product.title")
+    category_title = serializers.CharField(source="category.title")
+
     class Meta:
         model = ProductCategory
-        fields = '__all__'
+        fields = ['product_id', 'product_title', 'category_id', 'category_title']
 
 
 # product/get/category_ID/products/
@@ -26,7 +29,7 @@ class CategoryProductRetrieveSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'category_products']
 
 
-# product/all/
+# full data for preview product page
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
@@ -34,11 +37,20 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'price', 'old_price', 'description', 'quantity', 'brand_id']
 
 
-# product-preview
+# product/brand/all/
+class BrandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Brand
+        fields = ['id', 'title']
+
+
+# product-preview > # product/all
 class ProductPreviewSerializer(serializers.ModelSerializer):
+    brand = BrandSerializer(many=False, read_only=True)
+
     class Meta:
         model = Product
-        fields = ['id', 'title', 'price', 'old_price']
+        fields = ['id', 'title', 'price', 'old_price', 'photo', 'brand']
 
 
 # product-reviews
@@ -51,17 +63,11 @@ class ProductReviewSerializer(serializers.ModelSerializer):
 # product-retrieve info
 class ProductRetrieveSerializer(serializers.ModelSerializer):
     reviews = ProductReviewSerializer(many=True, read_only=True)
+    brand = BrandSerializer(many=False, read_only=True)
 
     class Meta:
         model = Product
-        fields = ['id', 'title', 'price', 'old_price', 'description', 'quantity', 'brand_id', 'reviews']
-
-
-# product/brand/all/
-class BrandSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Brand
-        fields = ['id', 'title']
+        fields = ['id', 'title', 'price', 'old_price', 'description', 'quantity', 'brand', 'photo', 'reviews']
 
 
 # product-brand

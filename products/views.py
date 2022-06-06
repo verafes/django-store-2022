@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from rest_framework import generics, filters
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
 from .filters import ProductFilter
 from .models import Category, Product, Brand
+from .paginations import ProductPagination
 from .serializers import CategorySerializer, ProductSerializer, BrandSerializer, ProductPreviewSerializer, \
     ProductRetrieveSerializer, BrandProductRetrieveSerializer, CategoryProductRetrieveSerializer
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 # api/product/category/list/
@@ -34,6 +36,7 @@ class ProductList(generics.ListAPIView):
     #    filterset_fields = ["title"]
     search_fields = ["title", "brand__title"]
     ordering_fields = ["title", "price"]
+    pagination_class = ProductPagination
 
     # def get_queryset(self):
     #     return Product.objects.filter(price__gte=900, price__lte=1400)
@@ -42,14 +45,18 @@ class ProductList(generics.ListAPIView):
 # api/product/add/
 class ProductCreate(generics.CreateAPIView):
     serializer_class = ProductSerializer
-    permission_classes = [IsAdminUser]
+#    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 
 
 # api/product/rud/<int:pk>/
 class ProductRUD(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
-    permission_classes = [IsAdminUser]
+#    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 
 
 # /api/product/get/product_id/
@@ -58,7 +65,7 @@ class ProductRetrieve(generics.RetrieveAPIView):
     queryset = Product.objects.all()
 
 
-# api/product/brand/all/
+# api/product/brands/all/
 class BrandList(generics.ListAPIView):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
@@ -68,6 +75,7 @@ class BrandList(generics.ListAPIView):
 class ProductBrandRetrieve(generics.RetrieveAPIView):
     serializer_class = BrandProductRetrieveSerializer
     queryset = Brand.objects.all()
+
 
 
 # Done:
