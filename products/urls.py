@@ -16,13 +16,10 @@ urlpatterns = [
 
 # product/category/CATEGORY_ID/products/
 # product/brands/get/BRAND_ID/
-# product/brands/all/
 
-
-# есть
 # api/product/category/list/
 # api/product/all/
-# api/product/brand/all/
+# api/product/brands/all/
 # api/product/add/
 # api/product/rud/<int:pk>/
 # api/product/get/<int:pk>/
