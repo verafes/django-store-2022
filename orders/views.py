@@ -1,10 +1,13 @@
+from datetime import datetime
+
 from django.shortcuts import render, HttpResponse
 from rest_framework import generics, status
+from rest_framework.response import Response
 
-from customers.models import Customer
+from customers.models import Customer, CustomerAddress
 from products.models import Product
 from .models import Order, OrderProduct
-from .serializers import OrderSerializer
+from .serializers import OrderSerializer, OrderProductSerializer
 import json
 
 
@@ -20,9 +23,11 @@ def update_cart(request):
                 order = Order.objects.create(customer=customer)
             else:
                 order = orders[0]
-
+            # if no quantity per request, set default by 1
+            if not 'quantity' in request_json:
+                request_json['quantity'] = 1
             try:
-                product_order = Order.objects.get(product=product)
+                product_order = OrderProduct.objects.get(product=product, order=order)
                 if request_json['quantity'] == 0:
                     product_order.delete()
                 else:
@@ -43,9 +48,9 @@ def update_cart(request):
                 'cart_item_count': count_products
             }
             response_status = status.HTTP_200_OK
-
             # return HttpResponse(json.dumps(response), status=status.HTTP_200_OK)
 
+            # Homework - check the availability of goods in stock
             # Homework - create function that returns total quantity
 
         except BaseException as error:
@@ -74,7 +79,62 @@ class OrderList(generics.ListAPIView):
         return Order.objects.filter(is_ordered=True)
 
 
-# List of Products in Order -  orders/get/products/
+# List of Products in Order - /api/orders/get/products/
 class OrderProductList(generics.ListAPIView):
     queryset = OrderProduct.objects.all()
     serializer_class = OrderSerializer
+
+
+class CartList(generics.ListAPIView):
+    serializer_class = OrderProductSerializer
+
+    def get_queryset(self):
+        try:
+            return OrderProduct.object.filter(
+                order__customer__token = self.kwargs['customer.token'],
+                order__is_ordered=False
+            )
+        except BaseException:
+             return None
+
+
+class OrderFinalize(generics.ListAPIView):
+    serializer_class = OrderSerializer
+    queryset = Order
+
+    def update(self, request, *args, **kwargs):
+        try:
+            request_json = request.data
+            customer = Customer.object.get(token=request_json['token'])
+            order = Order.object.filer(customer=customer, is_ordered=False).order_by('-id')[0]
+            serializer = self.get_serializer(order, data=request.data, partial=True)
+            serializer.is_valid(raise_exeption=True)
+            self.preform_update(serializer)
+            customer.first_name = request_json['first_name']
+            customer.last_name = request_json['last_name']
+            customer.email = request_json['email']
+            customer.phone = request_json['phone']
+
+            address = CustomerAddress.object.create(
+                customer = customer,
+                country = request_json['country'],
+                city = request_json['city'],
+                post_code = request_json['post_code'],
+                address = request_json['address']
+            )
+
+            # home - to check with fields if the address is already created in database,
+            # then we do not create it
+
+            order.customer_shipping_address = address
+            order.is_ordered = True
+            order.time_checkout = datetime.now()
+
+            customer.save()
+            order.save()
+
+            return Response(serializer.data)
+
+        except BaseException as error:
+            return Response({"status": False,
+                             "message": str("error")})

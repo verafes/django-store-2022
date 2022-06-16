@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Order
+from .models import Order, OrderProduct
 
 
 # List of Order - api/order/list/
@@ -14,7 +14,8 @@ class OrderSerializer(serializers.ModelSerializer):
 # Products in Order - api/order_product/list/
 class OrderProductSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Order
-        fields = ['id', 'country', 'city', 'address', 'post_code', 'customer']
+        model = OrderProduct
+        fields = '__all__'
+        # fields = ['id', 'country', 'city', 'address', 'post_code', 'customer']
 
 

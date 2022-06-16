@@ -45,3 +45,4 @@ class CustomerAddressList(generics.ListAPIView):
     queryset = CustomerAddress.objects.all()
     serializer_class = CustomerSerializer
 
+
