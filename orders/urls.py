@@ -5,6 +5,6 @@ urlpatterns = [
     path("order/list/", OrderList.as_view()),
     # path("order_product/list/", OrderProductList.as_view()),
     path("cart/update/", update_cart),
-    path('cart/list/<slud:customer_tocken>', CartList.as_view()),
+    path('cart/list/<slug:customer_token>/', CartList.as_view()),
     path("finalize/", OrderFinalize.as_view())
 ]

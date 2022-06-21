@@ -8,6 +8,7 @@ from customers.models import Customer, CustomerAddress
 from products.models import Product
 from .models import Order, OrderProduct
 from .serializers import OrderSerializer, OrderProductSerializer
+from customers.serializers import CustomerAddressSerializer
 import json
 
 
@@ -85,19 +86,21 @@ class OrderProductList(generics.ListAPIView):
     serializer_class = OrderSerializer
 
 
+# api/order/cart/list/
 class CartList(generics.ListAPIView):
     serializer_class = OrderProductSerializer
 
     def get_queryset(self):
         try:
             return OrderProduct.object.filter(
-                order__customer__token = self.kwargs['customer.token'],
+                order__customer__token=self.kwargs['customer.token'],
                 order__is_ordered=False
             )
         except BaseException:
-             return None
+            return None
 
 
+# api/order/finalize/
 class OrderFinalize(generics.ListAPIView):
     serializer_class = OrderSerializer
     queryset = Order
@@ -115,16 +118,23 @@ class OrderFinalize(generics.ListAPIView):
             customer.email = request_json['email']
             customer.phone = request_json['phone']
 
-            address = CustomerAddress.object.create(
-                customer = customer,
-                country = request_json['country'],
-                city = request_json['city'],
-                post_code = request_json['post_code'],
-                address = request_json['address']
-            )
-
             # home - to check with fields if the address is already created in database,
             # then we do not create it
+            try:
+                address = CustomerAddress.objects.get(customer=customer)
+                address.country = request_json['country']
+                address.city = request_json['city']
+                address.post_code = request_json['post_code']
+                address.address = request_json['address']
+
+            except CustomerAddress.DoesNotExist:
+                CustomerAddress.object.create(
+                    customer=customer,
+                    country=request_json['country'],
+                    city=request_json['city'],
+                    post_code=request_json['post_code'],
+                    address=request_json['address']
+                )
 
             order.customer_shipping_address = address
             order.is_ordered = True

@@ -31,7 +31,7 @@ def customer_create(request):
     return HttpResponse(json.dumps(response))
 
 
-# List of Customers - api/customers/all
+# List of Customers - api/customer/list
 class CustomerList(generics.ListAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
@@ -40,7 +40,7 @@ class CustomerList(generics.ListAPIView):
  #       return Customer.objects.filter(is_ordered=True)
 
 
-# List of Customer's Addresses - api/customers/address/all
+# List of Customer's Addresses - api/customer/address/list
 class CustomerAddressList(generics.ListAPIView):
     queryset = CustomerAddress.objects.all()
     serializer_class = CustomerSerializer
