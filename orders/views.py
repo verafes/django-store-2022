@@ -120,21 +120,14 @@ class OrderFinalize(generics.ListAPIView):
 
             # home - to check with fields if the address is already created in database,
             # then we do not create it
-            try:
-                address = CustomerAddress.objects.get(customer=customer)
-                address.country = request_json['country']
-                address.city = request_json['city']
-                address.post_code = request_json['post_code']
-                address.address = request_json['address']
 
-            except CustomerAddress.DoesNotExist:
-                CustomerAddress.object.create(
-                    customer=customer,
-                    country=request_json['country'],
-                    city=request_json['city'],
-                    post_code=request_json['post_code'],
-                    address=request_json['address']
-                )
+            address = CustomerAddress.object.create(
+                customer=customer,
+                country=request_json['country'],
+                city=request_json['city'],
+                post_code=request_json['post_code'],
+                address=request_json['address']
+            )
 
             order.customer_shipping_address = address
             order.is_ordered = True

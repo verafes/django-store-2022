@@ -5,7 +5,7 @@ from .models import Customer, CustomerAddress
 
 
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ['id', 'first_name', 'last_name', 'phone', 'email', 'time_created', 'user_id']
+    list_display = ['token', 'id', 'first_name', 'last_name', 'phone', 'email', 'time_created', 'user_id']
 
 
 class CustomerAddressAdmin(admin.ModelAdmin):
