@@ -33,7 +33,7 @@ def customer_create(request):
     else:
         response = {
             'status': False,
-            'message': "Method not allowed. POST required"
+            'message': "Method not allowed. POST required for new customer"
         }
     return HttpResponse(json.dumps(response))
 

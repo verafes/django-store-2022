@@ -37,7 +37,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'price', 'old_price', 'description', 'quantity', 'brand_id']
 
 
-# product/brand/all/
+# product/brands/all/
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
@@ -72,9 +72,12 @@ class ProductRetrieveSerializer(serializers.ModelSerializer):
 
 # product-brand
 class ProductBrandSerializer(serializers.ModelSerializer):
+    brand = BrandSerializer(many=False, read_only=True)
+
     class Meta:
         model = Product
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ["id", "title", "price", "old_price", "description", "quantity", "photo", "brand"]
 
 
 # product/get/BRAND_ID/ retrieve products
@@ -84,5 +87,3 @@ class BrandProductRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
         fields = ['id', 'title', 'brand_products']
-
-

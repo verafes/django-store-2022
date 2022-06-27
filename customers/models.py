@@ -16,11 +16,11 @@ class Customer(models.Model):
     email = models.CharField(verbose_name='Email', max_length=200, default='', blank=True, null=False)
     time_created = models.DateTimeField(verbose_name='Date', auto_now_add=True)
     user = models.ForeignKey(User, verbose_name='User', on_delete=models.CASCADE, null=True)
-    token = models.CharField(max_length=200, null=False, blank=False, verbose_name='Token')
+    token = models.CharField(max_length=200, null=False, blank=False, verbose_name='Token', default='')
 
     def __str__(self):
-        return self.token
-        #return f"{self.first_name} {self.last_name}"
+        return str(self.token)
+        # return f"{self.first_name} {self.last_name}"
 
 
 class CustomerAddress(models.Model):
@@ -33,6 +33,6 @@ class CustomerAddress(models.Model):
     city = models.CharField(verbose_name='City', max_length=30, blank=False, null=False)
     address = models.CharField(verbose_name='Street Address', max_length=200, blank=False, null=False)
     post_code = models.CharField(verbose_name='Post code', max_length=10, blank=False, null=False)
-    customer = models.ForeignKey(Customer, verbose_name='Customerr5', on_delete=models.CASCADE,
+    customer = models.ForeignKey(Customer, verbose_name='Customer', on_delete=models.CASCADE,
                                  blank=False, null=False)
 

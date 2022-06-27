@@ -25,8 +25,8 @@ def update_cart(request):
             else:
                 order = orders[0]
             # if no quantity per request, set default by 1
-            if not 'quantity' in request_json:
-                request_json['quantity'] = 1
+            # if not 'quantity' in request_json:
+            #     request_json['quantity'] = 1
             try:
                 product_order = OrderProduct.objects.get(product=product, order=order)
                 if request_json['quantity'] == 0:
@@ -49,7 +49,6 @@ def update_cart(request):
                 'cart_item_count': count_products
             }
             response_status = status.HTTP_200_OK
-            # return HttpResponse(json.dumps(response), status=status.HTTP_200_OK)
 
             # Homework - check the availability of goods in stock
             # Homework - create function that returns total quantity
@@ -63,11 +62,11 @@ def update_cart(request):
     else:
         response = {
             'status': False,
-            'message': 'Method not allowed. POST required'
+            'message': 'Method not allowed. POST required to update cart'
         }
         response_status = status.HTTP_405_METHOD_NOT_ALLOWED
 
-    return HttpResponse(json.dumps(response), status=status.HTTP_200_OK)
+    return HttpResponse(json.dumps(response), status=response_status)
 
 
 # List of Orders - api/order/all
