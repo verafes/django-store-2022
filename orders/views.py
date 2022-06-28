@@ -139,4 +139,4 @@ class OrderFinalize(generics.ListAPIView):
 
         except BaseException as error:
             return Response({"status": False,
-                             "message": str("error")})
+                             "message": str(error)})
