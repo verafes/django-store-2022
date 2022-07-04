@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from django.conf import settings
 from .models import Category, Product, Brand, ProductReview, ProductCategory
 
 
@@ -44,9 +46,18 @@ class BrandSerializer(serializers.ModelSerializer):
         fields = ['id', 'title']
 
 
+class PhotoField(serializers.RelatedField):
+    def to_representation(self, value):
+        try:
+            return f"{settings.BASE_DOMAIN}{value.url}"
+        except BaseException:
+            return f"{settings.BASE_DOMAIN}/media/images/nophoto.png"
+
+
 # product-preview > # product/all
 class ProductPreviewSerializer(serializers.ModelSerializer):
     brand = BrandSerializer(many=False, read_only=True)
+    photo = PhotoField(read_only=True)
 
     class Meta:
         model = Product
@@ -64,6 +75,7 @@ class ProductReviewSerializer(serializers.ModelSerializer):
 class ProductRetrieveSerializer(serializers.ModelSerializer):
     reviews = ProductReviewSerializer(many=True, read_only=True)
     brand = BrandSerializer(many=False, read_only=True)
+    photo = PhotoField(read_only=True)
 
     class Meta:
         model = Product
@@ -73,6 +85,7 @@ class ProductRetrieveSerializer(serializers.ModelSerializer):
 # product-brand
 class ProductBrandSerializer(serializers.ModelSerializer):
     brand = BrandSerializer(many=False, read_only=True)
+    photo = PhotoField(read_only=True)
 
     class Meta:
         model = Product

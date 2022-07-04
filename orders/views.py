@@ -14,9 +14,11 @@ import json
 
 # Method to update data in Cart - api/order/cart/update
 def update_cart(request):
+    print("!!!!!METHOD", request.method)
     if request.method == 'POST':
         try:
             request_json = json.loads(request.body)
+
             customer = Customer.objects.get(token=request_json['token'])
             product = Product.objects.get(pk=request_json['product_id'])
             orders = Order.objects.filter(customer=customer, is_ordered=False).order_by('-id')
@@ -25,15 +27,15 @@ def update_cart(request):
             else:
                 order = orders[0]
             # if no quantity per request, set default by 1
-            # if not 'quantity' in request_json:
-            #     request_json['quantity'] = 1
+            if not 'quantity' in request_json:
+                request_json['quantity'] = 1
             try:
                 product_order = OrderProduct.objects.get(product=product, order=order)
                 if request_json['quantity'] == 0:
                     product_order.delete()
                 else:
                     product_order.price = product.price
-                    product_order.quantity = request.json['quantity']
+                    product_order.quantity = request_json['quantity']
                     product_order.save()
 
             except OrderProduct.DoesNotExist:
@@ -91,11 +93,14 @@ class CartList(generics.ListAPIView):
 
     def get_queryset(self):
         try:
-            return OrderProduct.object.filter(
-                order__customer__token=self.kwargs['customer.token'],
+            print("!!!TOKEN", self.kwargs['customer_token'])
+            return OrderProduct.objects.filter(
+                order__customer__token=self.kwargs['customer_token'],
                 order__is_ordered=False
             )
-        except BaseException:
+
+        except BaseException as error:
+            print("ERROR", error)
             return None
 
 

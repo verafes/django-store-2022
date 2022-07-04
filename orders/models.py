@@ -9,8 +9,8 @@ class Order(models.Model):
         verbose_name = 'Order'
         verbose_name_plural = 'Orders'
 
-    customer = models.ForeignKey('customers.Customer', verbose_name="Product", on_delete=models.CASCADE, blank=False, null=False)
-    customer_shipping_address = models.ForeignKey(CustomerAddress, verbose_name="Product", on_delete=models.CASCADE,
+    customer = models.ForeignKey('customers.Customer', verbose_name="Customer", on_delete=models.CASCADE, blank=False, null=False)
+    customer_shipping_address = models.ForeignKey(CustomerAddress, verbose_name="Customer shipping address", on_delete=models.CASCADE,
                                                      blank=True, null=True)
     time_created = models.DateTimeField(verbose_name='Created Date', auto_now_add=True)
     time_checkout = models.DateTimeField(verbose_name='Checkout Date', auto_now_add=True)
